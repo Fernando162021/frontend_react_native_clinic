@@ -8,7 +8,7 @@ const ProfileScreen = () => {
   const profileData = {
     name: 'John Doe',
     email: 'johndoe@example.com',
-    profilePicture: 'https://example.com/profile_picture.jpg',
+    profilePicture: 'https://www.google.com/example',
     bio: 'Software engineer and cat lover',
   };
 

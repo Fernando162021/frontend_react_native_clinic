@@ -15,9 +15,15 @@ const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={{ headerShown: false }}>
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Dashboard" component={DashboardScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen 
+        name="Home" 
+        component={HomeScreen} />
+      <Tab.Screen 
+        name="Dashboard" 
+        component={DashboardScreen} />
+      <Tab.Screen  
+        name="Profile" 
+        component={ProfileScreen} />
     </Tab.Navigator>
   );
 };

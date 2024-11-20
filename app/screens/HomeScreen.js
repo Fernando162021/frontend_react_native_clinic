@@ -1,22 +1,34 @@
 import React from 'react';
-import { View, SafeAreaView, Text, Button, StyleSheet } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import color from '../constants/color'
 
-const DashboardScreen = ({ navigation }) => {
+const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Home</Text>
-      <Button title="Logout" onPress={() => navigation.navigate('Welcome')} />
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Bienvenido a FisioApp</Text>
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, 
-    justifyContent: 'center', 
-    alignItems: 'center' },
-  title: { 
-    fontSize: 24, 
-    fontWeight: 'bold' },
+  container: {
+    flex: 1,
+    padding: 20,
+    marginTop: 20,
+  },
+  header: {
+    padding: 20,
+    backgroundColor: color.PRIMARY,
+    alignItems: 'center',
+    borderRadius: 10,
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: color.WHITE
+  }
 });
 
-export default DashboardScreen;
+export default HomeScreen;

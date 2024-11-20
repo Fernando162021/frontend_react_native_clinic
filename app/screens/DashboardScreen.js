@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Platform } from 'react-native';
-import { View, SafeAreaView, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Button } from 'react-native';
+import { Platform, View, SafeAreaView, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import color from '../constants/color'
+import ConfirmModal from '../components/ConfirmModal'; // Asegúrate de importar el modal
+import colors from '../constants/color'; // Asegúrate de que tus colores estén importados
 
 const DashboardScreen = () => {
   const navigation = useNavigation();
@@ -16,10 +16,30 @@ const DashboardScreen = () => {
   ]);
 
   const [filter, setFilter] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [appointmentToDelete, setAppointmentToDelete] = useState(null); // Estado para la cita a eliminar
 
-  const filteredAppointments = appointments.filter(app => 
+  const filteredAppointments = appointments.filter(app =>
     app.name.toLowerCase().includes(filter.toLowerCase())
   );
+
+  const handleCancelPress = (appointmentId) => {
+    setAppointmentToDelete(appointmentId); // Guarda el id de la cita a eliminar
+    setModalVisible(true); // Muestra el modal
+  };
+
+  const handleConfirmDelete = () => {
+    if (appointmentToDelete) {
+      setAppointments(appointments.filter(app => app.id !== appointmentToDelete)); // Elimina la cita
+    }
+    setModalVisible(false); // Cierra el modal
+    setAppointmentToDelete(null); // Restablece el id
+  };
+
+  const handleCancelDelete = () => {
+    setModalVisible(false); // Solo cierra el modal sin eliminar nada
+    setAppointmentToDelete(null); // Restablece el id
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -43,13 +63,25 @@ const DashboardScreen = () => {
                 <Button title="Editar" onPress={() => {/* acción del botón 1 */}} />
               </View>
               <View style={styles.buttonWrapper}>
-                <Button title="Cancelar" onPress={() => {/* acción del botón 2 */}} />
+                <Button
+                  title="Cancelar"
+                  onPress={() => handleCancelPress(item.id)} // Llama a la función de cancelar
+                />
               </View>
             </View>
           </View>
         )}
       />
-      <Button title="Agendar nueva cita" />
+      {/* Modal de confirmación */}
+      <ConfirmModal
+        visible={modalVisible}
+        onCancel={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+        message="¿Estás seguro de que deseas eliminar esta cita?"
+      />
+      <TouchableOpacity>
+        <Button title='Agendar nueva cita'/>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -80,7 +112,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     ...Platform.select({
       ios: {
-        shadowColor: color.BLACK,
+        shadowColor: colors.BLACK,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.1,
         shadowRadius: 5,
