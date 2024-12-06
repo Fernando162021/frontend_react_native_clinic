@@ -6,7 +6,8 @@ import WelcomeScreen from './app/screens/WelcomeScreen';
 import LoginScreen from './app/screens/LoginScreen';
 import HomeScreen from './app/screens/HomeScreen';
 import ProfileScreen from './app/screens/ProfileScreen';
-import DashboardScreen from './app/screens/DashboardScreen';
+import AppointmentScreen from './app/screens/AppoinmentScreen';
+import PatientScreen from './app/screens/PatientScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -19,8 +20,11 @@ const TabNavigator = () => {
         name="Home" 
         component={HomeScreen} />
       <Tab.Screen 
-        name="Dashboard" 
-        component={DashboardScreen} />
+        name="Patient"
+        component={PatientScreen} />
+      <Tab.Screen 
+        name="Appointment" 
+        component={AppointmentScreen} />
       <Tab.Screen  
         name="Profile" 
         component={ProfileScreen} />
