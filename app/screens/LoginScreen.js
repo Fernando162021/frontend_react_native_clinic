@@ -1,26 +1,36 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import color from '../constants/color';
+import UserService from '../services/UserService';
 
 const LoginScreen = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const loginSchema = yup.object().shape({
-    email: yup
+    username: yup
       .string()
-      .email('Please enter a valid email')
-      .required('Email Address is Required'),
+      .required('El nombre de usuario es requerido'),
     password: yup
-      .string() 
-      .min(8, ({ min }) => `Password must be at least ${min} characters`)
-      .required('Password is required'),
+      .string()
+      .required('La contraseña es requerida'),
   });
+
+  const handleLogin = async (values) => {
+    try {
+      const response = await UserService.login(values);
+      Alert.alert('Inicio de sesión exitoso', 'Bienvenido a FisioApp', [
+        { text: 'OK', onPress: () => navigation.navigate('Main') },
+      ]);
+    } catch (error) {
+      Alert.alert('Error en el inicio de sesión', error.message);
+    }
+  };  
 
   return (
     <View style={styles.container}>
-      <View style={styles.title}> 
+      <View style={styles.title}>
         <Image 
           source={require('../assets/images/logo.png')}
           style={styles.image}  
@@ -28,32 +38,32 @@ const LoginScreen = ({ navigation }) => {
         <Text>FisioApp</Text>
       </View>
       <Formik
-        initialValues={{ email: '', password: '' }}
+        initialValues={{ username: '', password: '' }}
         validationSchema={loginSchema}
-        onSubmit={(values) => navigation.navigate('Main')}
+        onSubmit={handleLogin} // Usa la función handleLogin
       >
         {({ 
-        handleChange, 
-        handleBlur, 
-        handleSubmit, 
-        values, 
-        errors}) => (
+          handleChange, 
+          handleBlur, 
+          handleSubmit, 
+          values, 
+          errors 
+        }) => (
           <>
             <TextInput
-              name="email"
-              placeholder="Email Address"
+              name="username"
+              placeholder="Nombre de usuario"
               style={styles.input}
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-              value={values.email}
-              keyboardType='email-address'
+              onChangeText={handleChange('username')}
+              onBlur={handleBlur('username')}
+              value={values.username}
             />
-            {errors.email && 
-              <Text style={styles.error}>{errors.email}</Text>
+            {errors.username && 
+              <Text style={styles.error}>{errors.username}</Text>
             }
             <TextInput
               name="password"
-              placeholder="Password"
+              placeholder="Contraseña"
               style={styles.input}
               onChangeText={handleChange('password')}
               onBlur={handleBlur('password')}
@@ -74,7 +84,7 @@ const LoginScreen = ({ navigation }) => {
               <Text style={styles.buttonText}>Iniciar Sesión</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => {/* Navigate to ForgotPasswordScreen */}}>
+            <TouchableOpacity onPress={() => {/* Navegar a pantalla de recuperar contraseña */}}>
               <Text style={styles.forgotPassword}>¿Olvidaste tu contraseña?</Text>
             </TouchableOpacity>
           </>
@@ -114,7 +124,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: color.PRIMARY,
     textAlign: 'left',
-    marginBottom: 10
   },
   error: { 
     color: color.ERROR,
@@ -137,4 +146,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen
+export default LoginScreen;
